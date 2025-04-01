@@ -111,6 +111,7 @@ int main(void)
                     
                         if(GuiButton((Rectangle){Screen_Width-200,0,200,24},"Exit Game"))
                             {
+                                Unload_Carti(set_carti);
                                 CloseWindow();
                                 return 0;
                             }
@@ -138,6 +139,7 @@ int main(void)
                     EndDrawing();
 
                 }
+                    Unload_Carti(set_carti);
                     CloseWindow();
                     return 0;
             }

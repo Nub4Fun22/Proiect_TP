@@ -3,11 +3,14 @@
 #include <time.h>
 #include "Game.h"
 
+Texture2D texture_back;
+
+
 void InitCarti(Carte *set_carti) {
     for (int i = 2; i < NUMAR_CARTI; i++) {
         set_carti[i].val_carte = i;
         set_carti[i].afisare_carte = 0;
-        sprintf(set_carti[i].poza_carte, "E:/Facultate/Tp_Proiect/My_Project/Cards/Card_%d.png", i);
+        sprintf(set_carti[i].poza_carte, "../My_Project/Cards/Card_%d.png", i);
 
         Image image = LoadImage(set_carti[i].poza_carte);
         if (image.data == NULL) {
@@ -22,12 +25,21 @@ void InitCarti(Carte *set_carti) {
             printf("Failed to load texture from image: %s\n", set_carti[i].poza_carte);
         }
     }
+
+    Image backImage = LoadImage("../My_Project/Cards/back.png");
+    if (backImage.data != NULL) {
+        texture_back = LoadTextureFromImage(backImage);
+        UnloadImage(backImage);
+    }
+    texture_back = LoadTexture("resources/back.png");
+
 }
 
 void UnloadCarti(Carte *set_carti) {
     for (int i = 2; i < NUMAR_CARTI; i++) {
         UnloadTexture(set_carti[i].texture_carti);
     }
+    UnloadTexture(texture_back);
 }
 
 int TrageCarte(Carte *set_carti, int counter) {
@@ -55,5 +67,11 @@ void DrawCarti(Carte *set_carti, int *ordine, int count, float centerX, float ce
         if (index > 1 && set_carti[index].afisare_carte > 0) {
             DrawTexture(set_carti[index].texture_carti, centerX + ((i - 4) * 40), centerY, WHITE);
         }
+    }
+}
+
+void DrawCardBacks(int count, float centerX, float centerY) {
+    for (int i = 0; i < count; i++) {
+        DrawTexture(texture_back, centerX + ((i - 4) * 40), centerY, WHITE);
     }
 }

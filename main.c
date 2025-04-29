@@ -1,3 +1,4 @@
+/* main.c */
 #include <stdio.h>
 #include <time.h>
 
@@ -45,6 +46,16 @@ int main(void) {
 
             int card_counter = 0;
             int afisare_carduri_ordine[NUMAR_MAXIM_TRAGERE_CARTI] = {0};
+            int dealer_cards[NUMAR_MAXIM_TRAGERE_CARTI] = {0};
+            int dealer_counter = 0;
+
+            dealer_cards[dealer_counter++] = TrageCarte(set_carti, 0);
+            dealer_cards[dealer_counter++] = TrageCarte(set_carti, 0);
+            set_carti[dealer_cards[0]].afisare_carte = 1;
+            set_carti[dealer_cards[1]].afisare_carte = 1;
+
+            bool player_turn = true;
+            bool dealer_done = false;
 
             while (!WindowShouldClose()) {
                 BeginDrawing();
@@ -56,15 +67,49 @@ int main(void) {
                     return 0;
                 }
 
-                if (GuiButton((Rectangle){centerX, centerY + 100, 200, 24}, "Draw Card")) {
-                    int carte_trasa = TrageCarte(set_carti, card_counter);
-                    if (carte_trasa != -1) {
-                        set_carti[carte_trasa].afisare_carte++;
-                        afisare_carduri_ordine[card_counter++] = carte_trasa;
+                if (player_turn) {
+                    if (GuiButton((Rectangle){centerX - 110, centerY + 100, 100, 24}, "Draw Card")) {
+                        int carte_trasa = TrageCarte(set_carti, card_counter);
+                        if (carte_trasa != -1) {
+                            set_carti[carte_trasa].afisare_carte++;
+                            afisare_carduri_ordine[card_counter++] = carte_trasa;
+                        }
+                    }
+
+                    if (GuiButton((Rectangle){centerX + 10, centerY + 100, 100, 24}, "Pass")) {
+                        player_turn = false;
+                        int dealer_score = 0;
+                        for (int i = 0; i < dealer_counter; i++)
+                            dealer_score += set_carti[dealer_cards[i]].val_carte;
+
+                        while (dealer_score < 17 && dealer_counter < NUMAR_MAXIM_TRAGERE_CARTI) {
+                            int drawn = TrageCarte(set_carti, 0);
+                            if (drawn == -1) break;
+                            dealer_cards[dealer_counter++] = drawn;
+                            set_carti[drawn].afisare_carte = 1;
+                            dealer_score += set_carti[drawn].val_carte;
+                        }
+
+                        dealer_done = true;
                     }
                 }
 
+                if (!player_turn && dealer_done) {
+                    DrawCarti(set_carti, dealer_cards, dealer_counter, centerX, centerY - 100);
+                } else {
+                    DrawCardBacks(2, centerX, centerY - 100);
+                }
+
                 DrawCarti(set_carti, afisare_carduri_ordine, card_counter, centerX, centerY);
+
+                int total_score = 0;
+                for (int i = 0; i < card_counter; i++) {
+                    total_score += set_carti[afisare_carduri_ordine[i]].val_carte;
+                }
+                char score_text[50];
+                sprintf(score_text, "Score: %d", total_score);
+                DrawText(score_text, SCREEN_WIDTH - 150, 40, 20, WHITE);
+
                 EndDrawing();
             }
 

@@ -1,10 +1,8 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include "Game.h"
-
-Texture2D texture_back;
-
 
 void InitCarti(Carte *set_carti) {
     for (int i = 2; i < NUMAR_CARTI; i++) {
@@ -25,21 +23,12 @@ void InitCarti(Carte *set_carti) {
             printf("Failed to load texture from image: %s\n", set_carti[i].poza_carte);
         }
     }
-
-    Image backImage = LoadImage("../My_Project/Cards/back.png");
-    if (backImage.data != NULL) {
-        texture_back = LoadTextureFromImage(backImage);
-        UnloadImage(backImage);
-    }
-    texture_back = LoadTexture("resources/back.png");
-
 }
 
 void UnloadCarti(Carte *set_carti) {
     for (int i = 2; i < NUMAR_CARTI; i++) {
         UnloadTexture(set_carti[i].texture_carti);
     }
-    UnloadTexture(texture_back);
 }
 
 int TrageCarte(Carte *set_carti, int counter) {
@@ -70,8 +59,8 @@ void DrawCarti(Carte *set_carti, int *ordine, int count, float centerX, float ce
     }
 }
 
-void DrawCardBacks(int count, float centerX, float centerY) {
+void DrawCardBacks(int count, float centerX, float centerY, Texture2D back_texture) {
     for (int i = 0; i < count; i++) {
-        DrawTexture(texture_back, centerX + ((i - 4) * 40), centerY, WHITE);
+        DrawTexture(back_texture, centerX + ((i - 1) * 40), centerY, WHITE);
     }
 }

@@ -4,7 +4,7 @@
 #include "raylib.h"
 
 #define NUMAR_CARTI 12
-#define NUMAR_MAXIM_TRAGERE_CARTI 7
+#define NUMAR_MAXIM_TRAGERE_CARTI 5
 
 typedef struct {
     int afisare_carte;
@@ -13,12 +13,10 @@ typedef struct {
     int val_carte;
 } Carte;
 
-extern Texture2D texture_back;
-
 void InitCarti(Carte *set_carti);
 void UnloadCarti(Carte *set_carti);
-int TrageCarte(Carte *set_carti, int counter);
 void DrawCarti(Carte *set_carti, int *ordine, int count, float centerX, float centerY);
-void DrawCardBacks(int count, float centerX, float centerY);
+int TrageCarte(Carte *set_carti, int counter);
+void DrawCardBacks(int count, float centerX, float centerY, Texture2D back_texture);
 
 #endif

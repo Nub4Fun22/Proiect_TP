@@ -18,6 +18,10 @@ int main(void) {
     GuiLoadIcons("iconset.rgi", true);
     SetTargetFPS(60);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Blackjack");
+            Texture2D back_card = LoadTexture("../My_Project/Cards/Back.png");
+            if (back_card.id == 0) {
+                printf("Eroare: Back.png nu a fost încărcat corect!\n");
+            }
 
     while (!WindowShouldClose()) {
         float centerX = (SCREEN_WIDTH - 200) / 2;
@@ -39,6 +43,10 @@ int main(void) {
         if (start_game) {
             CloseWindow();
             InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Blackjack");
+            Texture2D back_card = LoadTexture("../My_Project/Cards/Back.png");
+            if (back_card.id == 0) {
+                printf("Eroare: Back.png nu a fost încărcat corect!\n");
+            }
 
             InitCarti(set_carti);
             GuiSetStyle(DEFAULT, TEXT_COLOR_NORMAL, 0x000000FF);
@@ -62,7 +70,8 @@ int main(void) {
                 ClearBackground(DARKGREEN);
 
                 if (GuiButton((Rectangle){SCREEN_WIDTH - 200, 0, 200, 24}, "Exit Game")) {
-                    UnloadCarti(set_carti);
+                    UnloadTexture(back_card);
+            UnloadCarti(set_carti);
                     CloseWindow();
                     return 0;
                 }
@@ -97,7 +106,7 @@ int main(void) {
                 if (!player_turn && dealer_done) {
                     DrawCarti(set_carti, dealer_cards, dealer_counter, centerX, centerY - 100);
                 } else {
-                    DrawCardBacks(2, centerX, centerY - 100);
+                    DrawCardBacks(2, centerX, centerY - 100, back_card);
                 }
 
                 DrawCarti(set_carti, afisare_carduri_ordine, card_counter, centerX, centerY);
@@ -113,6 +122,7 @@ int main(void) {
                 EndDrawing();
             }
 
+            UnloadTexture(back_card);
             UnloadCarti(set_carti);
             CloseWindow();
             return 0;

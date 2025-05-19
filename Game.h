@@ -15,8 +15,11 @@ typedef struct {
 
 void InitCarti(Carte *set_carti);
 void UnloadCarti(Carte *set_carti);
-void DrawCarti(Carte *set_carti, int *ordine, int count, float centerX, float centerY);
 int TrageCarte(Carte *set_carti, int counter);
+void DrawCarti(Carte *set_carti, int *ordine, int count, float centerX, float centerY);
 void DrawCardBacks(int count, float centerX, float centerY, Texture2D back_texture);
+void DrawCardForPlayer(Carte *set_carti, int *ordine, int *counter);
+void DealerDraw(Carte *set_carti, int *ordine, int *counter);
+int CalculateScore(Carte *set_carti, int *ordine, int count);
 
 #endif

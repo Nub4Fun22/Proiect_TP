@@ -9,6 +9,10 @@
 #define SCREEN_HEIGHT 450
 
 int main(void) {
+    InitAudioDevice();
+    Music menuMusic = LoadMusicStream("Music/menu.mp3");
+    Music gameMusic = LoadMusicStream("Music/game.mp3");
+    float volume = 5.0f;
     srand(time(NULL));
     Carte set_carti[NUMAR_CARTI];
     bool start_game = false;
@@ -18,6 +22,7 @@ int main(void) {
         SetTargetFPS(60);
         GuiSetStyle(DEFAULT, TEXT_COLOR_NORMAL, 0x000000FF);
         GuiSetFont(GetFontDefault());
+        PlayMusicStream(menuMusic);
 
     Texture2D back_card = LoadTexture("../My_Project/Cards/Back.png");
     if (back_card.id == 0) {
@@ -25,8 +30,11 @@ int main(void) {
     }
 
     while (!WindowShouldClose()) {
+        UpdateMusicStream(menuMusic);
         float centerX = (SCREEN_WIDTH - 200) / 2;
         float centerY = (SCREEN_HEIGHT - 24) / 2;
+        GuiSliderBar((Rectangle){centerX, centerY + 68, 200, 20}, NULL, TextFormat("Volume: %d", (int)volume), &volume, 0, 10);
+        SetMusicVolume(menuMusic, volume / 10.0f);
 
         BeginDrawing();
         ClearBackground(DARKGREEN);
@@ -49,7 +57,10 @@ int main(void) {
                 GuiLoadIcons("iconset.rgi", true);
                 SetTargetFPS(60);
                 GuiSetStyle(DEFAULT, TEXT_COLOR_NORMAL, 0x000000FF);
+                PlayMusicStream(gameMusic);
                 GuiSetFont(GetFontDefault());
+                GuiSliderBar((Rectangle){centerX, centerY, 200, 20}, NULL, TextFormat("Volume: %d", (int)volume), &volume, 0, 10);
+                SetMusicVolume(gameMusic, volume / 10.0f);
 
             Texture2D back_card = LoadTexture("../My_Project/Cards/Back.png");
             if (back_card.id == 0) {
@@ -78,6 +89,7 @@ int main(void) {
             const char *result_msg = NULL;
 
             while (!WindowShouldClose()) {
+                UpdateMusicStream(gameMusic);
                 BeginDrawing();
                 ClearBackground(DARKGREEN);
 

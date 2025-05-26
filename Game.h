@@ -23,3 +23,9 @@ void DealerDraw(Carte *set_carti, int *ordine, int *counter);
 int CalculateScore(Carte *set_carti, int *ordine, int count);
 
 #endif
+
+// Desenează maxim `maxCount` cărți dintr-un set
+void DrawCartiLimitate(Carte *set_carti, int *ordine, int count, float centerX, float centerY, int maxCount);
+
+// Power-up: Forțează dealerul să tragă o carte și cu 20% șansă și playerul
+bool UseForceDealerDraw(Carte *set_carti, int *ordineDealer, int *counterDealer, int *ordinePlayer, int *counterPlayer);

@@ -74,3 +74,36 @@ int CalculateScore(Carte *set_carti, int *ordine, int count) {
         score += set_carti[ordine[i]].val_carte;
     return score;
 }
+
+void DrawCartiLimitate(Carte *set_carti, int *ordine, int count, float centerX, float centerY, int maxCount) {
+    for (int i = 0; i < count && i < maxCount; i++) {
+        int index = ordine[i];
+        if (index > 1 && set_carti[index].afisare_carte > 0) {
+            DrawTexture(set_carti[index].texture_carti, centerX + ((i - 4) * 40), centerY, WHITE);
+        }
+    }
+}
+
+bool UseForceDealerDraw(Carte *set_carti, int *ordineDealer, int *counterDealer, int *ordinePlayer, int *counterPlayer) {
+    if (*counterDealer >= NUMAR_MAXIM_TRAGERE_CARTI) return false;
+
+    int carte = TrageCarte(set_carti, *counterDealer);
+    if (carte != -1) {
+        set_carti[carte].afisare_carte++;
+        ordineDealer[(*counterDealer)++] = carte;
+    }
+
+    int chance = rand() % 100;
+    if (chance < 20) {
+        // player trage forțat o carte
+        if (*counterPlayer < NUMAR_MAXIM_TRAGERE_CARTI) {
+            int cartePlayer = TrageCarte(set_carti, *counterPlayer);
+            if (cartePlayer != -1) {
+                set_carti[cartePlayer].afisare_carte++;
+                ordinePlayer[(*counterPlayer)++] = cartePlayer;
+                return true; // ghinion
+            }
+        }
+    }
+    return false;
+}
